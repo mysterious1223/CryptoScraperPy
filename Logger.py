@@ -22,7 +22,6 @@ class Logger:
         f.writelines ("["+str(datetime.today())+"] "+text+ "\n")
         f.close()
 
-
 #
 #L = Logger (os.path.abspath(os.getcwd()), "backup.outlog")
 

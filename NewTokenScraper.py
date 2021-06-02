@@ -7,6 +7,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 from datetime import datetime
 import os
 import json
+import Logger
 #initial items
 pd.set_option('display.float_format', lambda x: '%.5f' % x)
 pd.set_option('display.precision', 5)
@@ -109,7 +110,10 @@ class NewTokenScaper:
             #check frequency
             time.sleep(60 - time.time() % 60)
             print ('Scrape Job Starting')
+            
             self.ReloadPageContentFromTokenSniffer(self.driver)
+
+
             outfile = self.ProcessScrapedDataToList(self.CSV_FOLDER)
             print (f"output CSV saved {self.CSV_FOLDER}/{outfile}")
             print (f'Scrape Job Sleeping For {self.frequency}')
@@ -226,6 +230,8 @@ class NewTokenScaper:
         pass
 
 #script start
+
+
 scraper_app = NewTokenScaper()
 scraper_app.RunScraper()
 

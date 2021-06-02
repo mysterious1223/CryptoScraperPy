@@ -9,6 +9,8 @@ from webdriver_manager.firefox import GeckoDriverManager
 from datetime import datetime
 import os
 import json
+
+from Logger import Logger
 #initial items
 pd.set_option('display.float_format', lambda x: '%.5f' % x)
 pd.set_option('display.precision', 5)
@@ -68,8 +70,9 @@ class NewTokenScaper:
     driver = None
     ext_driver = None
     page_wait_time = 0
-
     CSV_FOLDER = './csv'
+    log = None
+
     def __init__ (self, frequency = 1, page_wait_time = 5):
         print ('Starting Scraper...')
         self.frequency = frequency
@@ -111,8 +114,17 @@ class NewTokenScaper:
             #check frequency
             time.sleep(60 - time.time() % 60)
             print ('Scrape Job Starting')
+
+            #unusded
+            now = datetime.now()
+            dt_string = now.strftime("%d%m%Y_%H%M%S")
+            self.log = Logger ('logs', f'NewTokenScraperLog{dt_string}.log') 
+            ##
+
             self.ReloadPageContentFromTokenSniffer(self.driver)
             outfile = self.ProcessScrapedDataToList(self.CSV_FOLDER)
+            self.log.writeLogEntry(f"output CSV saved {self.CSV_FOLDER}/{outfile}")
+            self.log.writeLogEntry(f'Scrape Job Sleeping For {self.frequency}')
             print (f"output CSV saved {self.CSV_FOLDER}/{outfile}")
             print (f'Scrape Job Sleeping For {self.frequency}')
             #clear token list
@@ -132,6 +144,8 @@ class NewTokenScaper:
             #print("here")
             right_button = driver.find_element_by_xpath ("/html/body/div/div/main/div[2]/div[2]/span[2]/a")
         except:
+            self.log.writeLogEntry(f'Error when attemping to pull contents from {self.tokensnifferurl}')
+            self.log.writeLogEntry('Retrying...')
             print (f'Error when attemping to pull contents from {self.tokensnifferurl}')
             print ('Retrying...')
             self.ReloadPageContentFromTokenSniffer (driver)
@@ -152,12 +166,14 @@ class NewTokenScaper:
         data_binance = soup_binance.find ('table', class_='Home_section__16Giz')
 
         if data_etherium == None and data_binance == None:
+            self.log.writeLogEntry('Error pulling table data')
             print ('Error pulling table data')
             return
         data_etherium = data_etherium.find ('tbody', class_='notranslate')
         data_binance = data_binance.find ('tbody', class_='notranslate')
 
         if data_etherium == None and data_binance == None:
+            self.log.writeLogEntry('Error pulling table data')
             print ('Error pulling table data tbody')
             return
 
@@ -165,6 +181,7 @@ class NewTokenScaper:
         data_binance = data_binance.find_all ("tr")
 
         if data_etherium == None and data_binance == None:
+            self.log.writeLogEntry('Error pulling table data')
             print ('Error pulling table data tr')
             return
 
@@ -187,6 +204,7 @@ class NewTokenScaper:
                 address = element.find ('a', class_ = "Home_address__2ERkX").text
                 #creation_time_passed = element.find ('td', class_='Home_mono__eWDn4').text
             except:
+                self.log.writeLogEntry(f'Error on element data extraction: {element}')
                 print (f'Error on element data extraction: {element}')
                 break
             typename = type_str
@@ -195,12 +213,14 @@ class NewTokenScaper:
             try:
                ScannData = self.GetScannTokenInfo(address_url, token_name, typename)
             except:
+                self.log.writeLogEntry(f'Error extracting Scann info {token_name} @ {address_url}')
                 print (f'Error extracting Scann info {token_name} @ {address_url}')
             #print (typename)
             newtoken = Token (token_name, address, address_url, typename, generated_timestamp, ScannData)
             self.tokens.append (newtoken)
             #break
     def GetScannTokenInfo (self, address_url, token_name, typename):
+        self.log.writeLogEntry(f'Retrieving data for {token_name} @ {address_url}')
         print (f'Retrieving data for {token_name} @ {address_url}')
         page_content = self.ScrapeAdditionalPageData(address_url)
         #generate the additional information
@@ -221,8 +241,10 @@ class NewTokenScaper:
             page_content = self.ext_driver.page_source.encode('utf-8')
             self.ext_driver.quit()
         except:
+            self.log.writeLogEntry(f'Error when trying to retrieve page contents {url}')
             print (f'Error when trying to retrieve page contents {url}')
             if attempt < 10:
+                self.log.writeLogEntry(f'Retrying... attempt {attempt}')
                 print (f'Retrying... attempt {attempt}')
                 time.sleep(self.page_wait_time + attempt)
                 self.ScrapeAdditionalPageData(url, attempt + 1)

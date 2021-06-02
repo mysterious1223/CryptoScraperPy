@@ -77,14 +77,21 @@ class NewTokensImporter:
     def RunImporter(self):
         print ('Importer started...')
         self.ConnectToDatabase()
+        isWatingMessageTrigger = True
 
         while (1):
-            time.sleep(60 - time.time() % 60)
-            print ('looking for new files')
+            #time.sleep(60 - time.time() % 60)
+            time.sleep(2)
+            #print ('looking for new files')
             ToImportFiles = self.FindNextFilesToProcess ()
+            if len(ToImportFiles) > 0:
+                isWatingMessageTrigger = True
             #Go through the list and import each file
             self.ImportDataFileToDb(ToImportFiles)
-            print ('Sleeping...')
+
+            if isWatingMessageTrigger:
+                print ('Sleeping...')
+            isWatingMessageTrigger = False
 
     def ImportDataFileToDb (self, ToImportFiles):
         #Import
@@ -94,7 +101,8 @@ class NewTokensImporter:
 
 
             #modify type to string [Supply]
-            dataframe["Max Supply"] = dataframe["Max Supply"].astype('int64')
+      
+            dataframe["Max Supply"] = dataframe["Max Supply"].fillna(0).astype('int64')
 
             if self.CreateImportLogForFile (fullpath, filename):
                 print (f'{filename} was imported successfully!')
@@ -119,8 +127,8 @@ class NewTokensImporter:
            TokenIdFromDb = self.FetchTokenIdFromDb(data[1]) 
            if TokenIdFromDb == 0:
                tokens_to_import.append (data)
-           else:
-               print (f'TokenId {TokenIdFromDb} -> Token {data[1]} exist') 
+           #else:
+               #print (f'TokenId {TokenIdFromDb} -> Token {data[1]} exist') 
         
     
         print (f'Importing {len(tokens_to_import)} to database')
@@ -129,8 +137,10 @@ class NewTokensImporter:
 
 
         for token_row in tokens_to_import:
-            if self.AddBasicTokenPandaFrameToDb (token_row, NewImportId):
-                print (f'{token_row[1]} was imported')
+            tokenId = self.AddBasicTokenPandaFrameToDb (token_row, NewImportId)
+            if tokenId != 0:
+                # return the newly created tokenid from above
+                #print (f'{token_row[1]} was imported')
                 if token_row[10] == 'Common':
                     #this is a common token. Please process
                     print ('This is a common token please process')
@@ -169,9 +179,9 @@ class NewTokensImporter:
             ({tokentype}, {tokenstatus} , {NewImportId}, '{frame[1]}','', '{frame[2]}','{frame[3]}', '{frame[5]}', '{frame[6]}','{frame[7]}','{frame[8]}','{frame[9]}', 0)
                 """
         if self.RunExecuteCommand (query):
-            return True
+            return self.FetchTokenIdFromDb (frame[1])
         else:
-            return False
+            return 0
         
     def FindTokenTypeIdOnDb (self, TokenTypeName):
         query = f"select * from TokenType where TokenTypeName='{TokenTypeName}'"
