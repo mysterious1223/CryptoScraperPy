@@ -35,7 +35,7 @@ class Exchange:
 class Token:
     TokenScannInfo = None
     def __init__(self, name, symbol, price, type, MarketCap, VolumeTwentyFour, CirculatingSupply, 
-        TotalSupply, TimeStamp, Address, AddressUrl, holders, transfers, Exchanges = []):
+        TotalSupply, TimeStamp, Address, AddressUrl, holders, transfers, coinrankingurl, Exchanges = []):
 
         self.name = name
         self.symbol = symbol
@@ -53,6 +53,7 @@ class Token:
         self.transfers = transfers
 
         self.Exchanges = Exchanges
+        self.coinrankingurl = coinrankingurl
     def AddExchange (self, ExchangeName, Price, TwentyFourHourTradeVolume):
         tExhange = Exchange (ExchangeName, Price, TwentyFourHourTradeVolume)
         self.Exchanges.append (tExhange)
@@ -200,7 +201,7 @@ class CryptoScraper:
                 now = datetime.now()
                 token = Token (token_name, token_sym, token_price, scann_result.typename,token_market_cap,token_twenty_four_hour_volume
                     ,token_circulated_supply, token_total_supply,
-                        now.strftime("%d/%m/%Y %H:%M:%S"), address, address_url, scann_result.holder, scann_result.transfers, exchanges)
+                        now.strftime("%d/%m/%Y %H:%M:%S"), address, address_url, scann_result.holder, scann_result.transfers,token_url ,exchanges)
                 print (f'Working on : {token.name} {token.Address}')
 
                 #self.DebugOutTokenInformation (token)
@@ -216,12 +217,12 @@ class CryptoScraper:
         #def __init__(self, name, symbol, price, type, MarketCap, VolumeTwentyFour, CirculatingSupply, 
         #TotalSupply, TimeStamp, Address, AddressUrl, holders, transfers, Exchanges = []):
         new_data_array =  [[token.name, token.Address, token.AddressUrl, token.type, token.TimeStamp, token.TotalSupply,
-            token.holders, token.transfers, 'N/A', 'Common', token.price, token.MarketCap, token.VolumeTwentyFour, token.CirculatingSupply, self.ExhangesToString(token.Exchanges)] for token in self._tokens]
+            token.holders, token.transfers, 'N/A', 'Common', token.price, token.MarketCap, token.VolumeTwentyFour, token.CirculatingSupply, self.ExhangesToString(token.Exchanges), token.coinrankingurl] for token in self._tokens]
 
 
         new_token_data_panda = pd.DataFrame(data=new_data_array, 
                       columns=['Token Name', "Address", "Address Url", "Crypto Type", "Time Stamp", "Max Supply", "# of Holder", "Transfers", "Decimals", "Token Type"
-                      , "Price", "Market Cap", "VolumeTwentyFour", "Circulating Supply", "Exchanges"])
+                      , "Price", "Market Cap", "VolumeTwentyFour", "Circulating Supply", "Exchanges", "CoinRankUrl"])
 
         outfile = self.GenerateCSV (new_token_data_panda, OutputLocation)
         return outfile
