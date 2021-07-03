@@ -1,7 +1,13 @@
+#Author: Kevin Singh
+
 import pandas as pd
 import pymssql
+import os
 import sys
+import time
 
+
+from enum import Enum 
 
 db_config = None
 data_lake_location = []
@@ -74,7 +80,7 @@ class database_query_handle:
             return df
         except:
             print (f'{query} : failed!')
-            return None
+            return pd.DataFrame()
     def execute_query (self, query) -> bool: # run insert, update, or del
         try:
             self.cursor.execute(query)
@@ -97,12 +103,22 @@ class database_query_handle:
 #Load into database. We will have two tables Exchanges and Tokens, TokenExchangeMapper
 
 
+common_col = 17
+new_col = 11
 
-
+class dataType (Enum):
+    new = 2
+    common = 1    
+    unknown = 0
 class data_import_file:
-    filename = ''
-    filepath = ''
-
+    _filename = ''
+    _data = None
+    _datatype = dataType.unknown
+    def __init__ (self, filename, data, datatype: dataType):
+        self._filename = filename
+        self._data = data
+        self._datatype = datatype
+        
 
 class TokenImporter:
     _db_conn = None
@@ -111,28 +127,106 @@ class TokenImporter:
         self._db_conn = db_conn
         self._dl_locations = dl_locations
 
-        pass
-    def grab_csv_from_datalake (self, path):
+    def run (self):
+        toImportFiles = []
+        isWatingMessageTrigger = True
+        while (1):
+            #time.sleep(60 - time.time() % 60)
+            time.sleep(2)
+            #print ('looking for new files')
+            toImportFiles = self.get_import_data_from_all_datalakes ()
+            if len(toImportFiles) > 0:
+                isWatingMessageTrigger = True
+            #Go through the list and import each file
+            #self.ImportDataFileToDb(ToImportFiles)
+                self.import_datafiles_to_db (toImportFiles)
+            if isWatingMessageTrigger:
+                print ('Sleeping...')
+            isWatingMessageTrigger = False
+
+    def grab_import_data_from_datalake (self, path):
+        importList = []
+        files = os.listdir(path)
+        files = [x for x in files if x.endswith('.csv')]
+        if len (files) == 0:
+            return importList
+        # go through location
+        for filename in files:
+            # we need to check if file has been imported!   
+            full_file_name = f'{path}/{filename}'
+            if not self.check_if_file_has_been_imported_query (filename):
+                # we will need to extract the information from the file using pandas!
+                importList.append (self.extract_info_from_importfile_to_object(full_file_name))
+            else:
+                print (f'{filename} has already been imported')
+        return importList
 
         pass
-    def grab_csv_from_all_datalakes (self) -> bool:
+    #get import data from all data lakes
+    def get_import_data_from_all_datalakes(self):
+        # loop through list of locations
+        curr_data_lake_data = []
+        for loc in self._dl_locations:
+            curr_data_lake_data = self.grab_import_data_from_datalake (loc)
+        return curr_data_lake_data
+
+
+    ###!!
+    def import_datafiles_to_db (self, importList):
+        print (f'{len(importList)} files to import')
+        for import_data in importList:
+            print (f'{import_data._filename} importing')
+            print (import_data._data)
+            # for common type token we will import the same way as new tokens, then handle all other columns differently
+
+            #extract the fields required for "token" into a new dataframe
+            #extract the fields required for the "other" tables into a new dataframe
         pass
 
+    # import basic information, works for new and common
+    def import_basic_portion (self, data):
+        pass
+    # import extra information
+    
+    # pandas transformations
+    def extract_info_from_importfile_to_object (self, file):
+        df = pd.read_csv(file)
+        dtype = dataType.unknown
+        num_col = len(df.columns)
+        if num_col == new_col:
+            dtype = dataType.new
+        if num_col == common_col:
+            dtype = dataType.common
 
+        return data_import_file (file, df, dtype)
+
+    # queries!
+    def check_if_file_has_been_imported_query (self, file) -> bool:
+        query = f"select * from NewTokenImportLogFiles where filename='{file}'"
+        df = db_conn.fetch_query (query)
+
+        if df.empty:
+            return False
+        else:
+            return True
     
 if __main__():
     db_conn = database_query_handle (db_config)
     db_conn.connect()
     tokenImporter = TokenImporter (db_conn, data_lake_location)
     #print (db_conn.fetch_single_query('select * from Token'))
-
+    tokenImporter.run()
     pass
 else:
     print ('Failed to init')
 
 
 
+
+
+
 #TODO####################
+
 
 #REMEMBER common and new tokens are very different so handle accordingly !!!!!!!!!
 
