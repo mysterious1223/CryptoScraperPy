@@ -96,8 +96,13 @@ class database_query_handle:
 
 #Load into database. We will have two tables Exchanges and Tokens, TokenExchangeMapper
 
+
+
+
 class data_import_file:
-    
+    filename = ''
+    filepath = ''
+
 
 class TokenImporter:
     _db_conn = None
@@ -124,3 +129,22 @@ if __main__():
     pass
 else:
     print ('Failed to init')
+
+
+
+#TODO####################
+
+#REMEMBER common and new tokens are very different so handle accordingly !!!!!!!!!
+
+# finish class data_import_file
+    # All fields that would be on a single import field. Including the data itself should be here
+    # make it modular, incase we add new fields to the import sheet
+# finish class TokenImporter
+    #finish the grab functions
+    #create the main loop
+    #create the function that will generate the data_import_file obj
+    #log to db if file has been imported
+    #do data transformations to data
+    #we should have two datasets. make sure there is a link between the exchange and its token
+    #remove a dupe if record exist on db. use an upsert
+    #push to db
