@@ -1,17 +1,22 @@
 #Author: Kevin Singh
 
 import pandas as pd
+from pandas.core.frame import DataFrame
 import pymssql
 import os
 import sys
 import time
-
-
 from enum import Enum 
 
 db_config = None
 data_lake_location = []
 
+basic_token_headers = ['Token Name', 'Address', 'Address Url', 'Crypto Type', 'Time Stamp', 'Max Supply', '# of Holder', 
+'Transfers', 'Decimals', 'Token Type', 
+# common fields
+'Price', 'Market Cap', 'VolumeTwentyFour', 'Circulating Supply'
+#Exchanges
+]
 
 
 class DbConfiguration:
@@ -156,7 +161,12 @@ class TokenImporter:
             full_file_name = f'{path}/{filename}'
             if not self.check_if_file_has_been_imported_query (filename):
                 # we will need to extract the information from the file using pandas!
-                importList.append (self.extract_info_from_importfile_to_object(full_file_name))
+
+                import_df = self.extract_info_from_importfile_to_object(full_file_name)
+                if import_df is not None:
+                    importList.append (import_df)
+                else:
+                    print (f'{filename} is blank')
             else:
                 print (f'{filename} has already been imported')
         return importList
@@ -176,21 +186,40 @@ class TokenImporter:
         print (f'{len(importList)} files to import')
         for import_data in importList:
             print (f'{import_data._filename} importing')
-            print (import_data._data)
+            #print (import_data._data)
             # for common type token we will import the same way as new tokens, then handle all other columns differently
 
+
             #extract the fields required for "token" into a new dataframe
+            # after this insert to db we need the ids that corespond to each token
+            #returns a data frame containing tokenid and tokenname
+
+            #we need to transform this data first
+            basic_token_data = import_data._data
+            #transform basic_token_data
+            imported_tokens = self.import_token_data (basic_token_data)
+
             #extract the fields required for the "other" tables into a new dataframe
+            #this will neeed a new dataframe containing the token id from the above
         pass
 
     # import basic information, works for new and common
-    def import_basic_portion (self, data):
-        pass
+    def import_token_data (self, data):
+        #returns a data frame containing tokenid and tokenname 
+        token_info = self.extract_token_info_from_df (data)
+        # import token_info to db
+        #print (token_info)
+        # query and retireve tokenid for each token imported
+
+        print (data)
+        #pass
     # import extra information
     
     # pandas transformations
     def extract_info_from_importfile_to_object (self, file):
         df = pd.read_csv(file)
+        if df.empty:
+            return None
         dtype = dataType.unknown
         num_col = len(df.columns)
         if num_col == new_col:
@@ -200,6 +229,11 @@ class TokenImporter:
 
         return data_import_file (file, df, dtype)
 
+    #extract basic token info from df
+    def extract_token_info_from_df (self, data):
+        t_data = data[basic_token_headers]
+        #transform fields?
+        return t_data
     # queries!
     def check_if_file_has_been_imported_query (self, file) -> bool:
         query = f"select * from NewTokenImportLogFiles where filename='{file}'"
@@ -229,16 +263,6 @@ else:
 
 
 #REMEMBER common and new tokens are very different so handle accordingly !!!!!!!!!
-
-# finish class data_import_file
-    # All fields that would be on a single import field. Including the data itself should be here
-    # make it modular, incase we add new fields to the import sheet
-# finish class TokenImporter
-    #finish the grab functions
-    #create the main loop
-    #create the function that will generate the data_import_file obj
-    #log to db if file has been imported
-    #do data transformations to data
-    #we should have two datasets. make sure there is a link between the exchange and its token
-    #remove a dupe if record exist on db. use an upsert
-    #push to db
+ 
+# finish basic data import. We need to just write the insert function, retireve the tokenid from db and add to df (tokenid, tokenname)
+# link df (tokeid, tokenname) to exchangedf (tokenname, exchanges) and insert to exhcnage map and exhcange
