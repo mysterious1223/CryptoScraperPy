@@ -94,7 +94,15 @@ class database_query_handle:
         except:
             print (f'Execution error on command {query}')
             return False
-        pass
+      
+    def execute_many_query (self, query, data_list):
+        try:
+            self.cursor.execute_many(query, data_list)
+            self.conn.commit()
+            return True
+        except:
+            print (f'Execution error on command {query}')
+            return False
     def __del__ (self):
         print ('Destruct db connection')
         self._conn.close()
@@ -195,12 +203,17 @@ class TokenImporter:
             #returns a data frame containing tokenid and tokenname
 
             #we need to transform this data first
-            basic_token_data = import_data._data
+            basic_token_data_df = import_data._data
             #transform basic_token_data
-            imported_tokens = self.import_token_data (basic_token_data)
+            imported_tokens_df = self.import_token_data (basic_token_data_df)
 
             #extract the fields required for the "other" tables into a new dataframe
             #this will neeed a new dataframe containing the token id from the above
+
+
+            #finally insert import file to database!!!!
+
+
         pass
 
     # import basic information, works for new and common
@@ -211,7 +224,33 @@ class TokenImporter:
         #print (token_info)
         # query and retireve tokenid for each token imported
 
-        print (data)
+        #remove dupes from the dataframe
+        dupes_df = token_info[token_info.duplicated(subset=['Token Name'])]
+        if not dupes_df.empty:
+            print ('Dupes found on data sheet')
+            print (dupes_df)
+            token_info=token_info.drop_duplicates(subset=['Token Name'], keep='first')
+
+        #query the database and return all tokens by name
+        all_tokens_from_db_df = self.get_tokens_from_db_query()
+
+        #dedupe
+    
+        #all_tokens_from_db_df = all_tokens_from_db_df.rename (columns={"TokenName": "Token Name"})
+        dedupe_df = pd.concat ([token_info ['Token Name'], all_tokens_from_db_df['TokenName']])
+        dedupe_df = dedupe_df.to_frame('Token Name')
+        dedupe_df = dedupe_df.drop_duplicates(subset=['Token Name'], keep=False)
+        deduped_list = list(set(dedupe_df['Token Name']))
+        #print (len(dedupe_df))
+        #print (token_info)
+        tokens_to_import_df = token_info[token_info['Token Name'].isin(deduped_list)]
+
+        # insert tokens and get list containing tokenids
+        imported_tokens_df = self.import_token_dataframe (tokens_to_import_df)
+
+
+
+        #print (data)
         #pass
     # import extra information
     
@@ -243,6 +282,14 @@ class TokenImporter:
             return False
         else:
             return True
+    def get_tokens_from_db_query (self):
+        query = f'select TokenId,TokenName from token'
+        df = db_conn.fetch_query (query)
+        return df
+    def import_token_dataframe (self, tokens_to_import_df):
+        #we are here 20210705!!!
+        #return list containing tokenid and token
+        pass
     
 if __main__():
     db_conn = database_query_handle (db_config)
@@ -266,3 +313,4 @@ else:
  
 # finish basic data import. We need to just write the insert function, retireve the tokenid from db and add to df (tokenid, tokenname)
 # link df (tokeid, tokenname) to exchangedf (tokenname, exchanges) and insert to exhcnage map and exhcange
+
