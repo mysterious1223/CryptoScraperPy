@@ -1,0 +1,8 @@
+[2021-06-02 18:13:16.878247] Retrieving data for Ethereum 3.0 @ https://etherscan.io/token/0x8f73841ad8a1058ea2179998864412077b491f69
+[2021-06-02 18:13:26.475050] Retrieving data for Shiba Candy @ https://etherscan.io/token/0xab00631ed7dace4622898b1ad2a7703a3907e4a8
+[2021-06-02 18:13:32.499228] Error when trying to retrieve page contents https://etherscan.io/token/0xab00631ed7dace4622898b1ad2a7703a3907e4a8
+[2021-06-02 18:13:32.500236] Retrying... attempt 0
+[2021-06-02 18:13:34.153256] Error extracting Scann info Shiba Candy @ https://etherscan.io/token/0xab00631ed7dace4622898b1ad2a7703a3907e4a8
+[2021-06-02 18:13:34.153841] Retrieving data for EthereumTrust @ https://etherscan.io/token/0x6960db988708c340d9bd47ea717e9828c022cddd
+[2021-06-02 18:13:34.484053] Error when trying to retrieve page contents https://etherscan.io/token/0x6960db988708c340d9bd47ea717e9828c022cddd
+[2021-06-02 18:13:34.484335] Retrying... attempt 0

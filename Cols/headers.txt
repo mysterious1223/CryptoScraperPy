@@ -1,0 +1,17 @@
+TokenId
+TokenTypeId
+TokenStatusId
+NewtokenImportLogFilesId
+TokenName
+Symbol
+Address
+AddressUrl
+TimeStamp
+Supply
+Holders
+Transfers
+Decimals
+CurrentPrice
+MarketCap
+TwentyFourHourVolume
+CurculatingSupply

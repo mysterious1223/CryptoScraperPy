@@ -1,0 +1,170 @@
+ 2038  sudo docker volume ls
+ 2039  sudo docker volume inspect docker_tokensniffer_export
+ 2040  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2041  sudo docker container prune
+ 2042  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2043  sudo docker volume create --name docker_tokensniffer_export --opt type=none --opt device="/mnt/ZSFSSD1/Programming Projects/TokenSnifferV2/csv/" --opt o=bind
+ 2044  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2045  sudo docker container prune
+ 2046  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2047  sudo docker volume inspect docker_tokensniffer_export
+ 2048  sudo docker volume rm docker_tokensniffer_export
+ 2049  sudo docker volume create --name docker_tokensniffer_export --opt type=none --opt device="/mnt/ZSFSSD1/Programming Projects/TokenSnifferV2/csv/" --opt o=bind
+ 2050  sudo docker volume inspect docker_to
+ 2051  sudo docker volume inspect docker_tokensniffer_export
+ 2052  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2053  la
+ 2054  ls
+ 2055  cat ScrapeNewTokens.py 
+ 2056  vim Dockerfile 
+ 2057  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2058  sudo docker container prune
+ 2059  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2060  vim Dockerfile 
+ 2061  sudo docker container prune
+ 2062  sudo docker build -t scrapenewtokens .
+ 2063  vim Dockerfile 
+ 2064  sudo docker container prune
+ 2065  sudo docker build -t scrapenewtokens .
+ 2066  vim Dockerfile 
+ 2067  sudo docker container prune
+ 2068  sudo docker build -t scrapenewtokens .
+ 2069  vim Dockerfile 
+ 2070  sudo docker container prune
+ 2071  sudo docker build -t scrapenewtokens .
+ 2072  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2073  sudo docker container prune
+ 2074  vim Dockerfile 
+ 2075  ls
+ 2076  cp * /home/mysterious/Documents/
+ 2077  cd /home/mysterious/Documents/
+ 2078  ls
+ 2079  mkdir docker_scripts
+ 2080  cp Dockerfile docker_scripts/
+ 2081  cp ScrapeNewTokens.py docker_scripts/
+ 2082  cd docker_scripts/
+ 2083  ls
+ 2084  sudo docker build -t scrapenewtokens .
+ 2085  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2086  vim Dockerfile 
+ 2087  sudo docker build -t scrapenewtokens .
+ 2088  vim Dockerfile 
+ 2089  sudo docker build -t scrapenewtokens .
+ 2090  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2091  sudo docker containers purge
+ 2092  sudo docker container purge
+ 2093  sudo docker container prune
+ 2094  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2095  ls -l
+ 2096  sudo chmod 777 ScrapeNewTokens.py 
+ 2097  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2098  sudo docker container prune
+ 2099  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2100  sudo docker container prune
+ 2101  docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2102  ls
+ 2103  mkdir testPy
+ 2104  cd testPy/
+ 2105  ls
+ 2106  touch Dockerfile
+ 2107  touch test.py
+ 2108  vim Dockerfile 
+ 2109  vim test.py 
+ 2110  sudo docker build -t testpython .
+ 2111  sudo docker run testpython
+ 2112  vim Dockerfile 
+ 2113  sudo docker build -t testpython .
+ 2114  sudo docker run testpython
+ 2115  cd ../
+ 2116  ls
+ 2117  vim Dockerfile 
+ 2118  ls
+ 2119  sudo docker container prune
+ 2120  sudo docker build -t scrapenewtokens .
+ 2121  vim Dockerfile 
+ 2122  sudo docker build -t scrapenewtokens .
+ 2123  docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2124  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2125  vim Dockerfile 
+ 2126  sudo docker container prune
+ 2127  sudo docker build -t scrapenewtokens .
+ 2128  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2129  sudo docker container prune
+ 2130  ls
+ 2131  vim Dockerfile 
+ 2132  sudo docker container prune
+ 2133  sudo docker build -t scrapenewtokens .
+ 2134  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2135  sudo docker container prune
+ 2136  vim Dockerfile 
+ 2137  sudo docker container prune
+ 2138  sudo docker build -t scrapenewtokens .
+ 2139  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2140  sudo docker container prune
+ 2141  vim Dockerfile 
+ 2142  sudo docker container prune
+ 2143  sudo docker build -t scrapenewtokens .
+ 2144  pip3
+ 2145  pip3 install beautifulsoup
+ 2146  pip3 install beautifulsoup4
+ 2147  vim Dockerfile 
+ 2148  sudo docker build -t scrapenewtokens .
+ 2149  vim Dockerfile 
+ 2150  sudo docker build -t scrapenewtokens .
+ 2151  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2152  cp /mnt/ZSFSSD1/Programming\ Projects/TokenSnifferV2/Logger.py .
+ 2153  ls
+ 2154  sudo docker container prune
+ 2155  vim Dockerfile 
+ 2156  sudo docker build -t scrapenewtokens .
+ 2157  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2158  cp /mnt/ZSFSSD1/Programming\ Projects/TokenSnifferV2/geckodriver .
+ 2159  vim Dockerfile 
+ 2160  sudo docker container prune
+ 2161  sudo docker build -t scrapenewtokens .
+ 2162  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2163  vim Dockerfile 
+ 2164  sudo docker build -t scrapenewtokens .
+ 2165  apt -y install firefox
+ 2166  sudo apt -y install firefox
+ 2167  vim Dockerfile 
+ 2168  sudo docker build -t scrapenewtokens .
+ 2169  vim Dockerfile 
+ 2170  sudo docker build -t scrapenewtokens .
+ 2171  vim Dockerfile 
+ 2172  sudo docker build -t scrapenewtokens .
+ 2173  vim Dockerfile 
+ 2174  sudo docker build -t scrapenewtokens .
+ 2175  vim Dockerfile 
+ 2176  sudo docker build -t scrapenewtokens .
+ 2177  vim Dockerfile 
+ 2178  sudo docker build -t scrapenewtokens .
+ 2179  vim Dockerfile 
+ 2180  sudo docker build -t scrapenewtokens .
+ 2181  vim Dockerfile 
+ 2182  sudo docker build -t scrapenewtokens .
+ 2183  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2184  sudo docker container prune
+ 2185  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2186  sudo docker container prune
+ 2187  vim Dockerfile 
+ 2188  sudo docker build -t scrapenewtokens .
+ 2189  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2190  sudo docker container prune
+ 2191  vim Dockerfile 
+ 2192  sudo docker build -t scrapenewtokens .
+ 2193  sudo docker run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2194  sudo docker container prune
+ 2195  sudo docker -d run --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2196  sudo docker run -d --name=scrapenewtokens --mount source=docker_tokensniffer_export,target=/home/csv scrapenewtokens
+ 2197  sudo docker containers ls
+ 2198  sudo docker container
+ 2199  sudo docker container ls
+ 2200  ls
+ 2201  cp * /mnt/ZSFSSD1/Programming\ Projects/TokenSnifferV2/ScrapeNewToken/
+ 2202  ls
+ 2203  ls /mnt/ZSFSSD1/Programming\ Projects/TokenSnifferV2/ScrapeNewToken/
+ 2204  cd /mnt/ZSFSSD1/Programming\ Projects/TokenSnifferV2/ScrapeNewToken/
+ 2205  ls
+ 2206  touch notes
+ 2207  history

@@ -112,7 +112,7 @@ class NewTokenScaper:
         
         while (1):
             #check frequency
-            time.sleep(60 - time.time() % 60)
+            #time.sleep(60 - time.time() % 60)
             print ('Scrape Job Starting')
 
             #unusded
@@ -190,9 +190,14 @@ class NewTokenScaper:
 
 
         new_data_array = [[token.name, token.address, token.address_url, token.typename, token.generated_timestamp, token.TokenScannInfo.max_supply,
-            token.TokenScannInfo.holders, token.TokenScannInfo.transfers, token.TokenScannInfo.decimals, 'New'] for token in self.tokens]
+            token.TokenScannInfo.holders, token.TokenScannInfo.transfers, token.TokenScannInfo.decimals, 'New',0,0,0,0] for token in self.tokens]
         new_token_data_panda = pd.DataFrame(data=new_data_array, 
-                      columns=['Token Name', "Address", "Address Url", "Crypto Type", "Time Stamp", "Max Supply", "# of Holder", "Transfers", "Decimals", "Token Type"])
+                      columns=['Token Name', 'Address', 'Address Url', 'Crypto Type', 'Time Stamp', 'Max Supply', '# of Holder', 
+                                'Transfers', 'Decimals', 'Token Type', 
+                                # common fields
+                                'Price', 'Market Cap', 'VolumeTwentyFour', 'Circulating Supply'
+                                #Exchanges
+                                ])
         outfile = self.GenerateCSV (new_token_data_panda, csv_location)
         return outfile
     def add_data_to_list (self,pagedata, type_str):
